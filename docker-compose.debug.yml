@@ -2,7 +2,10 @@ version: '3.7'
 
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.debug
+    entrypoint: /bin/bash
     command: -c "pip install debugpy -t /tmp && python /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 manage.py runserver 0.0.0.0:8000 --nothreading --noreload"
     volumes:
       - ./:/usr/src/app/
@@ -10,6 +13,7 @@ services:
       - ~/Downloads/source:/opt/source
     ports:
       - 8000:8000
+      - 5678:5678
     env_file:
       - ./.env.dev
   db:
